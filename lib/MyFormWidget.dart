@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:app_client/MapWidget.dart';
+
 
 void main() {
   runApp(MaterialApp(
@@ -81,7 +83,10 @@ class _MyFormWidgetState extends State<MyFormWidget> {
   }
 
   Future<void> _submitForm() async {
+    Navigator.push(context, MaterialPageRoute(builder: (c)=> MapWidget()));
+
     if (_formKey.currentState!.validate()) {
+
       // Récupération du jeton CSRF
       var csrfResponse = await http.get(Uri.parse('http://192.168.1.12:8000/csrf-token'));
       if (csrfResponse.statusCode == 200) {
@@ -107,11 +112,18 @@ class _MyFormWidgetState extends State<MyFormWidget> {
           body: jsonEncode(client.toJson()),
         );
 
+        print(response.statusCode);
         // Vérification de la réponse
         if (response.statusCode == 201) {
           // Succès : affichage d'un message
           var responseData = jsonDecode(response.body);
           _showSnackBar(responseData['message']);
+          // Navigation vers MapWidget après succès de la soumission
+
+          print(responseData['message']);
+            Navigator.push(context, MaterialPageRoute(builder: (c)=> MapWidget()),
+          );
+
         } else {
           // Erreur : affichage du corps de la réponse JSON
           var errorData = jsonDecode(response.body);

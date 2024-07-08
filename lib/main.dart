@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'MyHomePage.dart';
+import 'package:app_client/MapWidget.dart';
+
 
 void main() {
   runApp(MaterialApp(
